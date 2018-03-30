@@ -1,2 +1,3 @@
 # simple-blog
-BackboneJS in action
+
+Learn with me BackboneJS!

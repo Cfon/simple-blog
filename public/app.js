@@ -22,23 +22,34 @@ _.templateSettings = {
 var NewPostView = Backbone.View.extend({
   tagName: 'form',
   tmpl: _.template($('#newPostView').html()),
-  initialize({ posts }) {
+  initialize({ posts, $main }) {
     this.posts = posts;
+    this.$main = $main;
   },
   render() {
     this.$el.html(this.tmpl());
     return this;
   },
   events: {
-    'click button': 'createPost'
+    'click button': 'createPost',
+    'click a': 'allPosts'
   },
-  createPost() {
+  createPost(event) {
     this.posts.create({
       title: $('#title').val(),
       content: $('#content').val(),
       pubDate: new Date()
     });
     this.el.reset();
+    return false;
+  },
+  allPosts(event) {
+    event.preventDefault();
+    var plv = new PostListView({
+      collection: this.posts,
+      $main: this.$main
+    });
+    this.$main.html(plv.render().el);
     return false;
   }
 });
@@ -63,9 +74,10 @@ var PostListView = Backbone.View.extend({
     'click #newPost': 'newPost',
     'click #viewPost': 'viewPost'
   },
-  newPost() {
+  newPost(event) {
     var np = new NewPostView({
-      posts: this.collection
+      posts: this.collection,
+      $main: this.$main
     });
     this.$main.html(np.render().el);
     return false;
@@ -74,9 +86,10 @@ var PostListView = Backbone.View.extend({
     var href = $(event.currentTarget).attr('href');
     var id = href.match(/\d+$/)[0];
     id = parseInt(id, 10);
-    // console.log('viewPost #' + id);
     var pv = new PostView({
-      model: this.collection.get(id)
+      model: this.collection.get(id),
+      posts: this.collection,
+      $main: this.$main
     });
     this.$main.html(pv.render().el);
     return false;
@@ -86,10 +99,26 @@ var PostListView = Backbone.View.extend({
 // Post view
 var PostView = Backbone.View.extend({
   tmpl: _.template($('#postView').html()),
+  initialize({ posts, $main }) {
+    this.posts = posts;
+    this.$main = $main;
+  },
   render() {
     var model = this.model.toJSON();
     model.pubDate = new Date(Date.parse(model.pubDate)).toDateString();
     this.$el.html(this.tmpl(model));
     return this;
   },
+  events: {
+    'click a': 'allPosts'
+  },
+  allPosts(event) {
+    event.preventDefault();
+    var plv = new PostListView({
+      collection: this.posts,
+      $main: this.$main
+    });
+    this.$main.html(plv.render().el);
+    return false;
+  }
 });

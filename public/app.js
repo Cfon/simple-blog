@@ -40,11 +40,9 @@ var NewPostView = Backbone.View.extend({
       content: $('#content').val(),
       pubDate: new Date()
     });
-    this.el.reset();
     return false;
   },
   allPosts(event) {
-    event.preventDefault();
     var plv = new PostListView({
       collection: this.posts,
       $main: this.$main
@@ -113,7 +111,6 @@ var PostView = Backbone.View.extend({
     'click a': 'allPosts'
   },
   allPosts(event) {
-    event.preventDefault();
     var plv = new PostListView({
       collection: this.posts,
       $main: this.$main

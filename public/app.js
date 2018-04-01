@@ -103,37 +103,3 @@ var PostView = Backbone.View.extend({
     return false;
   }
 });
-
-// app router
-var AppRouter = Backbone.Router.extend({
-  initialize({ posts, $main }) {
-    this.posts = posts;
-    this.$main = $main;
-  },
-  routes: {
-    '': 'index',
-    'posts/new': 'newPost',
-    'posts/:id': 'viewPost'
-  },
-  index() {
-    var plv = new PostListView({
-      collection: this.posts,
-      router: this
-    });
-    this.$main.html(plv.render().el);
-  },
-  viewPost(id) {
-    var pv = new PostView({
-      model: this.posts.get(id),
-      router: this
-    });
-    this.$main.html(pv.render().el);
-  },
-  newPost() {
-    var np = new NewPostView({
-      posts: this.posts,
-      router: this
-    });
-    this.$main.html(np.render().el);
-  }
-});

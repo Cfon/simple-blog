@@ -13,7 +13,7 @@
     "nodemon": "^1.17.3"
   },
   "scripts": {
-    "test": "nodemon server"
+    "start": "nodemon server"
   },
   "author": "",
   "license": "ISC"

@@ -22,9 +22,9 @@ _.templateSettings = {
 var NewPostView = Backbone.View.extend({
   tagName: 'form',
   tmpl: _.template($('#newPostView').html()),
-  initialize({ posts, router }) {
+  initialize({ posts, $main }) {
     this.posts = posts;
-    this.router = router;
+    this.$main = $main;
   },
   render() {
     this.$el.html(this.tmpl());
@@ -40,12 +40,15 @@ var NewPostView = Backbone.View.extend({
       content: $('#content').val(),
       pubDate: new Date()
     });
-    this.router.navigate('/', { trigger: true });
+    this.el.reset();
     return false;
   },
   allPosts(event) {
-    var href = $(event.currentTarget).attr('href');
-    this.router.navigate(href, { trigger: true });
+    var plv = new PostListView({
+      collection: this.posts,
+      $main: this.$main
+    });
+    this.$main.html(plv.render().el);
     return false;
   }
 });
@@ -54,8 +57,8 @@ var NewPostView = Backbone.View.extend({
 var PostListView = Backbone.View.extend({
   listTmpl: _.template($('#postListView').html()),
   itemTmpl: _.template($('#postListItemView').html()),
-  initialize({ router }) {
-    this.router = router;
+  initialize({ $main }) {
+    this.$main = $main;
   },
   render() {
     this.$el.html(this.listTmpl());
@@ -71,13 +74,23 @@ var PostListView = Backbone.View.extend({
     'click #viewPost': 'viewPost'
   },
   newPost(event) {
-    var href = $(event.currentTarget).attr('href');
-    this.router.navigate(href, { trigger: true });
+    var np = new NewPostView({
+      posts: this.collection,
+      $main: this.$main
+    });
+    this.$main.html(np.render().el);
     return false;
   },
   viewPost(event) {
     var href = $(event.currentTarget).attr('href');
-    this.router.navigate(href, { trigger: true });
+    var id = href.match(/\d+$/)[0];
+    id = parseInt(id, 10);
+    var pv = new PostView({
+      model: this.collection.get(id),
+      posts: this.collection,
+      $main: this.$main
+    });
+    this.$main.html(pv.render().el);
     return false;
   }
 });
@@ -85,8 +98,9 @@ var PostListView = Backbone.View.extend({
 // Post view
 var PostView = Backbone.View.extend({
   tmpl: _.template($('#postView').html()),
-  initialize({ router }) {
-    this.router = router;
+  initialize({ posts, $main }) {
+    this.posts = posts;
+    this.$main = $main;
   },
   render() {
     var model = this.model.toJSON();
@@ -98,8 +112,11 @@ var PostView = Backbone.View.extend({
     'click a': 'allPosts'
   },
   allPosts(event) {
-    var href = $(event.currentTarget).attr('href');
-    this.router.navigate(href, { trigger: true });
+    var plv = new PostListView({
+      collection: this.posts,
+      $main: this.$main
+    });
+    this.$main.html(plv.render().el);
     return false;
   }
 });

@@ -59,12 +59,12 @@
   <script src="/app.js" charset="utf-8"></script>
   <script>
     (function() {
-      var posts = new Posts(<%- posts %>);
-      var plv = new PostListView({
-        collection: posts,
+      var appRouter = new AppRouter({
+        posts: new Posts(<%- posts %>),
         $main: $('#main')
       });
-      $('#main').html(plv.render().el);
+
+      Backbone.history.start({ pushState: true });
     })();
   </script>
 </body>

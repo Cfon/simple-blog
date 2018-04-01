@@ -44,8 +44,7 @@ var NewPostView = Backbone.View.extend({
     return false;
   },
   allPosts(event) {
-    var href = $(event.currentTarget).attr('href');
-    this.router.navigate(href, { trigger: true });
+    this.router.navigate('/', { trigger: true });
     return false;
   }
 });
@@ -71,8 +70,7 @@ var PostListView = Backbone.View.extend({
     'click #viewPost': 'viewPost'
   },
   newPost(event) {
-    var href = $(event.currentTarget).attr('href');
-    this.router.navigate(href, { trigger: true });
+    this.router.navigate('/posts/new', { trigger: true });
     return false;
   },
   viewPost(event) {
@@ -91,7 +89,7 @@ var PostView = Backbone.View.extend({
   },
   render() {
     var model = this.model.toJSON();
-    model.pubDate = new Date(Date.parse(model.pubDate)).toDateString();
+    model.pubDate = new Date(model.pubDate).toDateString();
     this.$el.html(this.tmpl(model));
     return this;
   },
@@ -99,8 +97,7 @@ var PostView = Backbone.View.extend({
     'click a': 'allPosts'
   },
   allPosts(event) {
-    var href = $(event.currentTarget).attr('href');
-    this.router.navigate(href, { trigger: true });
+    this.router.navigate('/', { trigger: true });
     return false;
   }
 });
@@ -131,10 +128,10 @@ var AppRouter = Backbone.Router.extend({
     this.$main.html(pv.render().el);
   },
   newPost() {
-    var np = new NewPostView({
+    var npv = new NewPostView({
       posts: this.posts,
       router: this
     });
-    this.$main.html(np.render().el);
+    this.$main.html(npv.render().el);
   }
 });

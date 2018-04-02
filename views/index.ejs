@@ -12,6 +12,7 @@
 
 <body class="container">
   <h1>Simple Blog</h1>
+  <hr>
   <div id="main"></div>
 
   <!-- view templates -->
@@ -19,7 +20,7 @@
       <ul></ul>
       <hr>
       <div class="">
-        <a href="/posts/new" id="newPost">New post</a>
+        <a href="/posts/new" id="newPost" class="btn btn-primary">New post</a>
       </div>
     </template>
   <template id="postListItemView">
@@ -30,18 +31,19 @@
       <div class="form-group">
         <label for="title">Title</label>
         <input class="form-control col-sm-8" type="text" id="title"
-          placeholder="post title here" required>
+          placeholder="post title here">
       </div>
       <div class="form-group">
         <label for="content">Text</label>
         <textarea class="form-control col-sm-8" id="content"></textarea>
       </div>
-      <div class="form-group">
-        <button class="btn btn-primary">Post</button>
-      </div>
-      <hr>
-      <div class="">
-        <a href="/">All Posts</a>
+      <div class="row">
+        <div class="col-sm-2">
+          <button class="btn btn-primary">Submit post</button>
+        </div>
+        <div class="col-sm-2">
+          <a href="/" class="btn btn-primary">Back</a>
+        </div>
       </div>
     </template>
 
@@ -51,7 +53,7 @@
       <p>{{ content }}</p>
       <hr>
       <div class="">
-        <a href="/">All Posts</a>
+        <a href="/" class="btn btn-primary">Back</a>
       </div>
     </template>
 

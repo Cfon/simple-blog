@@ -1,10 +1,10 @@
 // Post model
 var Post = Backbone.Model.extend({
-  defaults: {
-    title: '',
-    content: '',
-    pubDate: new Date()
-  }
+  // defaults: {
+  //   title: '',
+  //   content: '',
+  //   pubDate: new Date()
+  // }
 });
 
 // Post collection

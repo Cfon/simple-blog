@@ -23,6 +23,21 @@ app.post('/posts', function (req, res) {
   });
 });
 
+app.get('/posts/:id/comments', function (req, res) {
+  comments.find(
+    { postId: parseInt(req.params.id, 10) },
+    function (err, results) {
+      res.json(results);
+    }
+  );
+});
+
+app.post('/posts/:id/comments', function (req, res) {
+  comments.insert(req.body, function (err, result) {
+    res.json(result);
+  });
+});
+
 app.get('/*', function (req, res) {
   posts.find(function (err, results) {
     res.render('index.ejs', {

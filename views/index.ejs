@@ -3,6 +3,8 @@
 
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>BackboneJS In Action</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" charset="utf-8"></script>
@@ -12,7 +14,6 @@
 
 <body class="container">
   <h1>Simple Blog</h1>
-  <hr>
   <div id="main"></div>
 
   <!-- view templates -->
@@ -27,35 +28,69 @@
       <li><a href="/posts/{{ id }}" id="viewPost">{{ title }}</a></li>
     </template>
 
-  <template id="newPostView">
+  <template id="postFormView">
       <div class="form-group">
         <label for="title">Title</label>
-        <input class="form-control col-sm-8" type="text" id="title"
-          placeholder="post title here">
+        <input class="form-control" type="text" id="title"
+          placeholder="Enter title here">
       </div>
       <div class="form-group">
         <label for="content">Text</label>
-        <textarea class="form-control col-sm-8" id="content"></textarea>
+        <textarea class="form-control" rows="8" cols="80" id="content"></textarea>
       </div>
-      <div class="row">
-        <div class="col-sm-2">
-          <button class="btn btn-primary">Submit post</button>
+      <div class="form-group">
+        <button class="btn btn-primary">Submit</button>
+        <a href="/" class="btn btn-outline-primary">Back</a>
+      </div>
+  </template>
+
+  <template id="postView">
+      <div class="card">
+        <div class="card-header">
+          {{ title }}
+          <div class="text-muted float-right">
+            {{ pubDate}}
+          </div>
         </div>
-        <div class="col-sm-2">
-          <a href="/" class="btn btn-primary">Back</a>
+        <div class="card-body">
+          {{ content }}
         </div>
+      </div>
+      <div class="mt-1">
+        <a href="/posts/{{id}}/comments" class="btn btn-primary">View comments</a>
+        <a href="/" class="btn btn-outline-primary">Back</a>
       </div>
     </template>
 
-  <template id="postView">
-      <h3>{{ title }}</h3>
-      <p>{{ pubDate}}</p>
-      <p>{{ content }}</p>
+  <template id="commentFormView">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input class="form-control" type="text" name="name" id="name"
+        placeholder="Your name here">
+      </div>
+      <div class="form-group">
+        <label for="comment">Text message</label>
+        <textarea class="form-control" name="comment" rows="8" cols="80" id="comment"></textarea>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary mr-1">Submit</button>
+        <a href="/posts/{{id}}" class="btn btn-outline-primary">Back</a>
+      </div>
+  </template>
+
+  <template id="commentView">
       <hr>
       <div class="">
-        <a href="/" class="btn btn-primary">Back</a>
+        <strong>{{ name }}</strong> said on <span class="text-muted">{{ pubDate }}</span>:
+      </div>
+      <div class="">
+        {{ comment }}
       </div>
     </template>
+
+  <template id="commentsView">
+    <h2>Comments</h2>
+  </template>
 
   <!-- app code -->
   <script src="/app.js" charset="utf-8"></script>
@@ -66,7 +101,9 @@
         $main: $('#main')
       });
 
-      Backbone.history.start({ pushState: true });
+      Backbone.history.start({
+        pushState: true
+      });
     })();
   </script>
 </body>
